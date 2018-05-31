@@ -17,12 +17,15 @@
     // 得到imageView和titleLabel的宽、高
     CGFloat imageWith = self.currentImage.size.width;
     CGFloat imageHeight = self.currentImage.size.height;
+    // 文本过长后面...显示
+    self.titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
     
     // 获取TitleSize
     CGSize titleSize = [self sizeForText:[self titleForState:UIControlStateNormal] font:self.titleLabel.font size:CGSizeMake(HUGE, HUGE) mode:self.titleLabel.lineBreakMode];
     
     CGFloat labelWidth = titleSize.width;
     CGFloat labelHeight = titleSize.height;
+    CGFloat btnWidth = self.frame.size.width;
    
     // 声明全局的imageEdgeInsets和labelEdgeInsets
     UIEdgeInsets imageEdgeInsets = UIEdgeInsetsZero;
@@ -46,8 +49,15 @@
         }
             break;
         case ButtonEdgeInsetsStyleRight: {
-            imageEdgeInsets = UIEdgeInsetsMake(0, labelWidth+space, 0, -labelWidth-space);
-            labelEdgeInsets = UIEdgeInsetsMake(0, -imageWith-space, 0, imageWith+space);
+            // 如果文本长度+图片宽度+space > Button的宽度
+            if (labelWidth+imageWith+space > btnWidth) {
+                imageEdgeInsets = UIEdgeInsetsMake(0, btnWidth-labelWidth+space+imageWith, 0, -labelWidth-space);
+                labelEdgeInsets = UIEdgeInsetsMake(0, -imageWith-space, 0, imageWith+space);
+            }
+            else{
+                imageEdgeInsets = UIEdgeInsetsMake(0, labelWidth+space, 0, -labelWidth-space);
+                labelEdgeInsets = UIEdgeInsetsMake(0, -imageWith-space, 0, imageWith+space);
+            }
         }
             break;
         default:
